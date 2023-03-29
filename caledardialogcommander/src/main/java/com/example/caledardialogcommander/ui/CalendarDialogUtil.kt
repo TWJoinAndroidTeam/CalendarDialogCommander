@@ -28,11 +28,11 @@ object CalendarDialogUtil {
         return list
     }
 
-    suspend fun waitCalendarDateDialogResponse(context: Context, dateCalenderType: DateCalenderType, onCancel: () -> Unit): DateInfo {
+    suspend fun waitCalendarDateDialogResponse(context: Context, dateCalenderType: DateCalenderType, onCancel: (() -> Unit)? = null): DateInfo {
         return suspendCancellableCoroutine { continuation ->
 
             continuation.invokeOnCancellation {
-                onCancel.invoke()
+                onCancel?.invoke()
             }
 
             val dialog = showCalendarDateDialog(context, dateCalenderType) { view, year, month, dayOfMonth ->
@@ -45,11 +45,11 @@ object CalendarDialogUtil {
         }
     }
 
-    suspend fun waitCalendarTimeDialogResponse(context: Context, timePickerType: TimePickerType, onCancel: () -> Unit): TimeInfo {
+    suspend fun waitCalendarTimeDialogResponse(context: Context, timePickerType: TimePickerType, onCancel: (() -> Unit)? = null): TimeInfo {
         return suspendCancellableCoroutine { continuation ->
 
             continuation.invokeOnCancellation {
-                onCancel.invoke()
+                onCancel?.invoke()
             }
 
             val dialog = showCalendarTimeDialog(context, timePickerType) { timePicker, hourOfDay, min ->
