@@ -10,8 +10,8 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.example.calendarDialogCommander'
-                artifactId = 'CalendarDialogCommander'
+                groupId = 'com.example.caledardialogcommander'
+                artifactId = 'calendarDialogCommander'
                 version = '1.0.0'
             }
         }
