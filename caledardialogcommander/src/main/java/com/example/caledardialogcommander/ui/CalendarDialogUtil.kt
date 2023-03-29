@@ -28,7 +28,7 @@ object CalendarDialogUtil {
         return list
     }
 
-    private suspend fun waitCalendarDateDialogResponse(context: Context, dateCalenderType: DateCalenderType, onCancel: () -> Unit): DateInfo {
+    suspend fun waitCalendarDateDialogResponse(context: Context, dateCalenderType: DateCalenderType, onCancel: () -> Unit): DateInfo {
         return suspendCancellableCoroutine { continuation ->
 
             continuation.invokeOnCancellation {
@@ -45,7 +45,7 @@ object CalendarDialogUtil {
         }
     }
 
-    private suspend fun waitCalendarTimeDialogResponse(context: Context, timePickerType: TimePickerType, onCancel: () -> Unit): TimeInfo {
+    suspend fun waitCalendarTimeDialogResponse(context: Context, timePickerType: TimePickerType, onCancel: () -> Unit): TimeInfo {
         return suspendCancellableCoroutine { continuation ->
 
             continuation.invokeOnCancellation {

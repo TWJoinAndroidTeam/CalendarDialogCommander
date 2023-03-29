@@ -34,18 +34,26 @@ class MainActivity : AppCompatActivity() {
         setTime(calender.get(Calendar.HOUR_OF_DAY), calender.get(Calendar.MINUTE))
 
         viewBinding.btnDateCalendar.setOnClickListener {
-            CalendarDialogUtil.showCalendarDateDialog(
-                this, DateCalenderType.StartNowCalender(themeResId = R.style.DatePickerDialogTheme)
-            ) { view, year, month, dayOfMonth ->
-                setDate(year, month, dayOfMonth)
+            lifecycleScope.launch {
+                val dateInfo = CalendarDialogUtil.waitCalendarDateDialogResponse(
+                    this@MainActivity, DateCalenderType.StartNowCalender(themeResId = R.style.DatePickerDialogTheme)
+                ) {
+                    Toast.makeText(this@MainActivity, "cancel date by user!!", Toast.LENGTH_SHORT).show()
+                }
+
+                setDate(dateInfo.year, dateInfo.month, dateInfo.dayOfMonth)
             }
         }
 
         viewBinding.btnTimeCalendar.setOnClickListener {
-            CalendarDialogUtil.showCalendarTimeDialog(
-                this, TimePickerType.NormalTimePicker(true, themeResId = R.style.CustomTimePickerDialog)
-            ) { view, hourOfDay, minute ->
-                setTime(hourOfDay, minute)
+            lifecycleScope.launch {
+                val timeInfo = CalendarDialogUtil.waitCalendarTimeDialogResponse(
+                    this@MainActivity, TimePickerType.NormalTimePicker(true, themeResId = R.style.CustomTimePickerDialog)
+                ) {
+                    Toast.makeText(this@MainActivity, "cancel time by user!!", Toast.LENGTH_SHORT).show()
+                }
+
+                setTime(timeInfo.hourOfDay, timeInfo.minute)
             }
         }
 
@@ -57,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                         .addNextRequest(DateCalenderType.StartNowCalender(themeResId = R.style.DatePickerDialogTheme))
                         .addNextRequest(TimePickerType.NormalTimePicker(true, R.style.CustomTimePickerDialog))
                 ) {
-                    Toast.makeText(this@MainActivity, "cancel by user!!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "cancel date and time by user!!", Toast.LENGTH_SHORT).show()
                 }
 
                 responseList.forEach {
@@ -74,8 +82,6 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-
-
         }
     }
 
