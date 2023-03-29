@@ -1,4 +1,4 @@
-package com.example.calendarlibrary.ui
+package com.example.caledardialogcommander.ui
 
 import android.app.TimePickerDialog
 import android.content.Context

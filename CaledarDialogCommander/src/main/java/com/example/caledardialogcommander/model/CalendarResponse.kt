@@ -1,8 +1,8 @@
-package com.example.calendarlibrary.model
+package com.example.caledardialogcommander.model
 
 interface CalendarResponse
 
-data class DataInfo(
+data class DateInfo(
     val year: Int,
     val month: Int,
     val dayOfMonth: Int

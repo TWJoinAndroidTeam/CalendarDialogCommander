@@ -1,52 +1,69 @@
-package com.example.calendarlibrary.ui
+package com.example.caledardialogcommander.ui
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import com.example.calendarlibrary.model.*
+import com.example.caledardialogcommander.model.*
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.*
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 object CalendarDialogUtil {
 
+    suspend fun showContinuousCalendar(context: Context, calendarRequest: CalendarRequest, onCancel: () -> Unit): MutableList<CalendarResponse> {
+        val list = mutableListOf<CalendarResponse>()
 
-    suspend fun showContinuousCalendar(context: Context, calenderRequestList: List<TimeRequestType>) {
-        calenderRequestList.forEach {
+        calendarRequest.timeRequestTypeList.forEach {
 
             when (it) {
-
                 is DateCalenderType -> {
-                    waitCalendarDateDialogResponse(context, it)
+                    list.add(waitCalendarDateDialogResponse(context, it, onCancel))
                 }
-
                 is TimePickerType -> {
-                    waitCalendarTimeDialogResponse(context, it)
+                    list.add(waitCalendarTimeDialogResponse(context, it, onCancel))
                 }
             }
-
-
         }
+
+        return list
     }
 
-    private suspend fun waitCalendarDateDialogResponse(context: Context, dateCalenderType: DateCalenderType): DataInfo {
-        return suspendCoroutine { continuation ->
-            showCalendarDateDialog(context, dateCalenderType) { view, year, month, dayOfMonth ->
-                continuation.resume(DataInfo(year, month, dayOfMonth))
+    private suspend fun waitCalendarDateDialogResponse(context: Context, dateCalenderType: DateCalenderType, onCancel: () -> Unit): DateInfo {
+        return suspendCancellableCoroutine { continuation ->
+
+            continuation.invokeOnCancellation {
+                onCancel.invoke()
+            }
+
+            val dialog = showCalendarDateDialog(context, dateCalenderType) { view, year, month, dayOfMonth ->
+                continuation.resume(DateInfo(year, month, dayOfMonth))
+            }
+
+            dialog.setOnCancelListener {
+                continuation.cancel()
             }
         }
     }
 
-    private suspend fun waitCalendarTimeDialogResponse(context: Context, timePickerType: TimePickerType): TimeInfo {
-        return suspendCoroutine { continuation ->
-            showCalendarTimeDialog(context, timePickerType) { timePicker, hourOfDay, min ->
+    private suspend fun waitCalendarTimeDialogResponse(context: Context, timePickerType: TimePickerType, onCancel: () -> Unit): TimeInfo {
+        return suspendCancellableCoroutine { continuation ->
+
+            continuation.invokeOnCancellation {
+                onCancel.invoke()
+            }
+
+            val dialog = showCalendarTimeDialog(context, timePickerType) { timePicker, hourOfDay, min ->
                 continuation.resume(TimeInfo(hourOfDay, min))
             }
+
+            dialog.setOnCancelListener {
+                continuation.cancel()
+            }
         }
     }
 
 
-    fun showCalendarDateDialog(context: Context, dateCalenderType: DateCalenderType, callback: DatePickerDialog.OnDateSetListener) {
+    fun showCalendarDateDialog(context: Context, dateCalenderType: DateCalenderType, callback: DatePickerDialog.OnDateSetListener): DatePickerDialog {
 
         val datePickerDialog = when (dateCalenderType) {
             is DateCalenderType.NormalCalender -> {
@@ -90,9 +107,11 @@ object CalendarDialogUtil {
         }
 
         datePickerDialog.show()
+
+        return datePickerDialog
     }
 
-    fun showCalendarTimeDialog(context: Context, timePickerType: TimePickerType, callback: TimePickerDialog.OnTimeSetListener) {
+    fun showCalendarTimeDialog(context: Context, timePickerType: TimePickerType, callback: TimePickerDialog.OnTimeSetListener): TimePickerDialog {
 
         val calender = Calendar.getInstance()
         val hour = calender.get(Calendar.HOUR_OF_DAY)
@@ -144,6 +163,8 @@ object CalendarDialogUtil {
         }
 
         timePicker.show()
+
+        return timePicker
     }
 }
 

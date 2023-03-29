@@ -1,4 +1,4 @@
-package com.example.calendarlibrary.model
+package com.example.caledardialogcommander.model
 
 import java.util.*
 

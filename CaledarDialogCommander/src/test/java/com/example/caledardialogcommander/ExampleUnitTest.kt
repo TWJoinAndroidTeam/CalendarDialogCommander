@@ -1,4 +1,4 @@
-package com.example.calendarlibrary
+package com.example.caledardialogcommander
 
 import org.junit.Test
 
