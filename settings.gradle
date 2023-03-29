@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CalendarLibrary"
 include ':app'
-include ':CaledarDialogCommander'
+include ':caledardialogcommander'
