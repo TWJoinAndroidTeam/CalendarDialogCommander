@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                     this@MainActivity,
                     CalendarRequest()
                         .addNextRequest(DateCalenderType.StartNowCalender(themeResId = R.style.DatePickerDialogTheme))
-                        .addNextRequest(TimePickerType.EndNowCustomTimePicker(70, true, R.style.CustomTimePickerDialog))
+                        .addNextRequest(TimePickerType.NormalTimePicker(true, R.style.CustomTimePickerDialog))
                 ) {
                     Toast.makeText(this@MainActivity, "cancel date and time by user!!", Toast.LENGTH_SHORT).show()
                 }
