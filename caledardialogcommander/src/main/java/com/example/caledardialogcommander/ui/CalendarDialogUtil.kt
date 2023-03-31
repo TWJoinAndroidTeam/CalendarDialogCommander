@@ -115,28 +115,32 @@ object CalendarDialogUtil {
 
         val calender = Calendar.getInstance()
         val hour = calender.get(Calendar.HOUR_OF_DAY)
-        val min = calender.get(Calendar.MINUTE)
+        val minute = calender.get(Calendar.MINUTE)
 
         val timePicker = when (timePickerType) {
 
             is TimePickerType.NormalTimePicker -> {
 
-                TimePickerDialog(context, timePickerType.themeResId, callback, hour, min, timePickerType.is24Hours)
+                TimePickerDialog(context, timePickerType.themeResId, callback, hour, minute, timePickerType.is24Hours)
             }
 
-            is TimePickerType.StartOrBeforeNowCustomTimePicker -> {
+            is TimePickerType.StartNowCustomTimePicker -> {
 
-                RangeTimePickerDialog(context, timePickerType.themeResId, callback, hour, min, timePickerType.is24Hours).apply {
+                RangeTimePickerDialog(context, timePickerType.themeResId, callback, hour, minute, timePickerType.is24Hours).apply {
 
-                    val hourRange = timePickerType.minuteRange.div(60)
+                    setMin(hour, minute)
 
-                    val minuteRange = timePickerType.minuteRange.rem(60)
+                    addMinuteAndSetMaxTimeRange(timePickerType.minuteRange, this)
+                }
+            }
 
-                    if (hourRange < 0) {
-                        setMin(hourRange, minuteRange)
-                    } else {
-                        setMax(hourRange, minuteRange)
-                    }
+            is TimePickerType.EndNowCustomTimePicker -> {
+
+                RangeTimePickerDialog(context, timePickerType.themeResId, callback, hour, minute, timePickerType.is24Hours).apply {
+
+                    minusMinuteAndSetMinTimeRange(timePickerType.minuteRange, this)
+
+                    setMax(hour, minute)
                 }
             }
 
@@ -144,19 +148,15 @@ object CalendarDialogUtil {
 
                 RangeTimePickerDialog(context, timePickerType.themeResId, callback, timePickerType.defaultHour, timePickerType.defaultMinute, timePickerType.is24Hours).apply {
 
-                    val calendar = Calendar.getInstance()
+                    val minRange = timePickerType.minMinuteRange
+                    val maxRange = timePickerType.maxMinuteRange
 
-                    val minHourRange = timePickerType.minMinuteRange?.div(60)
-                    val minMinuteRange = timePickerType.minMinuteRange?.rem(60)
-                    val maxHourRange = timePickerType.maxMinuteRange?.div(60)
-                    val maxMinuteRange = timePickerType.maxMinuteRange?.rem(60)
-
-                    if (minMinuteRange != null && minHourRange != null) {
-                        setMin(calendar.get(Calendar.HOUR_OF_DAY) - minHourRange, minMinuteRange)
+                    if (minRange != null) {
+                        minusMinuteAndSetMinTimeRange(minRange, this)
                     }
 
-                    if (maxHourRange != null && maxMinuteRange != null) {
-                        setMax(calendar.get(Calendar.HOUR_OF_DAY) + maxHourRange, maxMinuteRange)
+                    if (maxRange != null) {
+                        addMinuteAndSetMaxTimeRange(maxRange, this)
                     }
                 }
             }
@@ -165,6 +165,22 @@ object CalendarDialogUtil {
         timePicker.show()
 
         return timePicker
+    }
+
+    private fun minusMinuteAndSetMinTimeRange(minuteRange: Int, rangeTimePickerDialog: RangeTimePickerDialog) {
+        val minCalendar = Calendar.getInstance()
+
+        minCalendar.add(Calendar.MINUTE, -minuteRange)
+
+        rangeTimePickerDialog.setMin(minCalendar.get(Calendar.HOUR_OF_DAY), minCalendar.get(Calendar.MINUTE))
+    }
+
+    private fun addMinuteAndSetMaxTimeRange(minuteRange: Int, rangeTimePickerDialog: RangeTimePickerDialog) {
+        val maxCalendar = Calendar.getInstance()
+
+        maxCalendar.add(Calendar.MINUTE, minuteRange)
+
+        rangeTimePickerDialog.setMax(maxCalendar.get(Calendar.HOUR_OF_DAY), maxCalendar.get(Calendar.MINUTE))
     }
 }
 
