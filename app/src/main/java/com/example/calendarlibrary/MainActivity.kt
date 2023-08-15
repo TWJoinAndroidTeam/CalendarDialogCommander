@@ -7,12 +7,19 @@ import androidx.lifecycle.lifecycleScope
 import com.example.caledardialogcommander.model.*
 import com.example.caledardialogcommander.ui.CalendarDialogUtil
 import com.example.calendarlibrary.databinding.ActivityMainBinding
+import com.example.calendarlibrary.date_time.fomatToString
+import com.example.calendarlibrary.date_time.getCalenderString
+import com.example.calendarlibrary.date_time.toTimePattern
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityMainBinding
+
+    companion object {
+        val dateTimePattern = "yyyy/MM/dd".toTimePattern()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "cancel date by user!!", Toast.LENGTH_SHORT).show()
                 }
 
-                setDate(dateInfo.year, dateInfo.month, dateInfo.dayOfMonth)
+                setDate(dateInfo.calendar)
             }
         }
 
@@ -72,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                     when (it) {
 
                         is DateInfo -> {
-                            setDate(it.year, it.month, it.dayOfMonth)
+                            setDate(it.calendar)
                         }
 
                         is TimeInfo -> {
@@ -85,8 +92,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setDate(calendar: Calendar) {
+        viewBinding.txtDate.text = dateTimePattern.getCalenderString(calendar)
+    }
+
     private fun setDate(year: Int, month: Int, dayOfMonth: Int) {
-        viewBinding.txtDate.text = "${year}/${month + 1}/${dayOfMonth}"
+        viewBinding.txtDate.text = "${year}/${month}/${dayOfMonth}"
     }
 
     private fun setTime(hourOfDay: Int, minute: Int) {
