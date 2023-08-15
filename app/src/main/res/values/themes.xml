@@ -25,6 +25,7 @@
     <!-- datePickerDialog -->
     <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/purple_500</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:buttonBarButtonStyle">@style/CustomButtonBarButtonStyle</item>
     </style>
 
@@ -33,6 +34,7 @@
         <!--        <item name="android:dialogTheme">@style/MyDialogTheme</item>-->
         <item name="android:timePickerStyle">@style/MyTimePicker</item>
         <item name="colorAccent">@color/purple_500</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:buttonBarButtonStyle">@style/CustomButtonBarButtonStyle</item>
     </style>
 

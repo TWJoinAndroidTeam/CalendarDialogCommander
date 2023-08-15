@@ -36,7 +36,12 @@ object CalendarDialogUtil {
             }
 
             val dialog = showCalendarDateDialog(context, dateCalenderType) { view, year, month, dayOfMonth ->
-                continuation.resume(DateInfo(year, month, dayOfMonth))
+
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                continuation.resume(DateInfo(year, month + 1, dayOfMonth, calendar))
             }
 
             dialog.setOnCancelListener {
@@ -53,7 +58,12 @@ object CalendarDialogUtil {
             }
 
             val dialog = showCalendarTimeDialog(context, timePickerType) { timePicker, hourOfDay, min ->
-                continuation.resume(TimeInfo(hourOfDay, min))
+
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                calendar.set(Calendar.MINUTE, min)
+
+                continuation.resume(TimeInfo(hourOfDay, min, calendar))
             }
 
             dialog.setOnCancelListener {
