@@ -8,16 +8,21 @@ import android.widget.TimePicker
 class RangeTimePickerDialog(context: Context?, dialogTheme: Int, callBack: OnTimeSetListener?, hourOfDay: Int, minute: Int, is24HourView: Boolean) :
     TimePickerDialog(context, dialogTheme, callBack, hourOfDay, minute, is24HourView) {
 
-    private var minHour = -1
-    private var minMinute = -1
-    private var maxHour = 100
-    private var maxMinute = 100
-    private var currentHour = 0
-    private var currentMinute = 0
+
+    private companion object {
+        const val NO_MATCH_VALUE = -1
+    }
+
+    private var minHour = NO_MATCH_VALUE
+    private var minMinute = NO_MATCH_VALUE
+    private var maxHour = NO_MATCH_VALUE
+    private var maxMinute = NO_MATCH_VALUE
+    private var currentHour: Int = 0
+    private var currentMinute: Int = 0
 
 
     fun setMin(hour: Int, minute: Int) {
-        minHour = hour
+        this.minHour = hour
         minMinute = minute
     }
 
@@ -28,34 +33,43 @@ class RangeTimePickerDialog(context: Context?, dialogTheme: Int, callBack: OnTim
 
     override fun onTimeChanged(view: TimePicker, hourOfDay: Int, minute: Int) {
         super.onTimeChanged(view, hourOfDay, minute)
-        when {
-            //當小時選擇小於等於最小限制
-            hourOfDay <= minHour -> {
-                currentHour = minHour
 
-                currentMinute = if (minute >= minMinute) {
-                    minute
-                } else {
-                    minMinute
-                }
+        getTimeAfterCheck(hourOfDay, minute)
+
+    }
+
+    private fun getTimeAfterCheck(hourOfDay: Int, minute: Int) {
+        val newHour: Int
+        val newMinute: Int
+
+        when {
+            hourOfDay < minHour -> {
+                newHour = minHour
+                newMinute = minMinute
             }
 
-            //當小時選擇大於等於最大限制
-            hourOfDay >= maxHour -> {
-                currentHour = maxHour
-                currentMinute = if (minute <= maxMinute) {
-                    minute
-                } else {
-                    maxMinute
-                }
+            hourOfDay == minHour && minute < minMinute -> {
+                newHour = minHour
+                newMinute = minMinute
+            }
+
+            hourOfDay > maxHour -> {
+                newHour = maxHour
+                newMinute = maxMinute
+
+            }
+
+            hourOfDay == maxHour && minute > maxMinute -> {
+                newHour = maxHour
+                newMinute = maxMinute
             }
 
             else -> {
-                currentHour = hourOfDay
-                currentMinute = minute
+                newHour = hourOfDay
+                newMinute = minute
             }
         }
 
-        updateTime(currentHour, currentMinute)
+        updateTime(newHour, newMinute)
     }
 }

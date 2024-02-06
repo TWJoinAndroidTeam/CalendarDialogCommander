@@ -3,7 +3,12 @@ package com.example.caledardialogcommander.ui
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import com.example.caledardialogcommander.model.*
+import com.example.caledardialogcommander.model.ui.CalendarRequest
+import com.example.caledardialogcommander.model.ui.CalendarResponse
+import com.example.caledardialogcommander.model.ui.DateCalenderType
+import com.example.caledardialogcommander.model.ui.DateInfo
+import com.example.caledardialogcommander.model.ui.TimeInfo
+import com.example.caledardialogcommander.model.ui.TimePickerType
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.*
 import kotlin.coroutines.resume
@@ -19,6 +24,7 @@ object CalendarDialogUtil {
                 is DateCalenderType -> {
                     list.add(waitCalendarDateDialogResponse(context, it, onCancel))
                 }
+
                 is TimePickerType -> {
                     list.add(waitCalendarTimeDialogResponse(context, it, onCancel))
                 }
@@ -90,6 +96,7 @@ object CalendarDialogUtil {
 
                 }
             }
+
             is DateCalenderType.EndNowCalender -> {
                 val calendar = Calendar.getInstance()
                 val minCalender = dateCalenderType.minCalender
@@ -140,7 +147,18 @@ object CalendarDialogUtil {
 
                     setMin(hour, minute)
 
-                    addMinuteAndSetMaxTimeRange(timePickerType.minuteRange, this)
+                    var max: Int? = null
+
+                    if (timePickerType.hourRange != null) {
+
+                        max = 60 * timePickerType.hourRange
+                    }
+
+                    if (timePickerType.minuteRange != null) {
+                        max = (max ?: 0) + timePickerType.minuteRange
+                    }
+
+                    addMinuteAndSetMaxTimeRange(max, this)
                 }
             }
 
@@ -148,7 +166,18 @@ object CalendarDialogUtil {
 
                 RangeTimePickerDialog(context, timePickerType.themeResId, callback, hour, minute, timePickerType.is24Hours).apply {
 
-                    minusMinuteAndSetMinTimeRange(timePickerType.minuteRange, this)
+                    var min: Int? = null
+
+                    if (timePickerType.hourRange != null) {
+
+                        min = 60 * timePickerType.hourRange
+                    }
+
+                    if (timePickerType.minuteRange != null) {
+                        min = (min ?: 0) + timePickerType.minuteRange
+                    }
+
+                    minusMinuteAndSetMinTimeRange(min, this)
 
                     setMax(hour, minute)
                 }
@@ -177,7 +206,10 @@ object CalendarDialogUtil {
         return timePicker
     }
 
-    private fun minusMinuteAndSetMinTimeRange(minuteRange: Int, rangeTimePickerDialog: RangeTimePickerDialog) {
+    private fun minusMinuteAndSetMinTimeRange(minuteRange: Int?, rangeTimePickerDialog: RangeTimePickerDialog) {
+
+        if (minuteRange == null) return
+
         val minCalendar = Calendar.getInstance()
 
         minCalendar.add(Calendar.MINUTE, -minuteRange)
@@ -185,7 +217,10 @@ object CalendarDialogUtil {
         rangeTimePickerDialog.setMin(minCalendar.get(Calendar.HOUR_OF_DAY), minCalendar.get(Calendar.MINUTE))
     }
 
-    private fun addMinuteAndSetMaxTimeRange(minuteRange: Int, rangeTimePickerDialog: RangeTimePickerDialog) {
+    private fun addMinuteAndSetMaxTimeRange(minuteRange: Int?, rangeTimePickerDialog: RangeTimePickerDialog) {
+
+        if (minuteRange == null) return
+
         val maxCalendar = Calendar.getInstance()
 
         maxCalendar.add(Calendar.MINUTE, minuteRange)

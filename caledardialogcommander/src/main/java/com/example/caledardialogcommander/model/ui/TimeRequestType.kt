@@ -1,4 +1,4 @@
-package com.example.caledardialogcommander.model
+package com.example.caledardialogcommander.model.ui
 
 import java.util.*
 
@@ -51,14 +51,15 @@ sealed class TimePickerType(open val is24Hours: Boolean, open val themeResId: In
      * @param minuteRange 分鐘區間最大值
      * @param themeResId dialog style id
      */
-    data class StartNowCustomTimePicker(val minuteRange: Int, override val is24Hours: Boolean, override val themeResId: Int = 0) : TimePickerType(is24Hours, themeResId)
+    data class StartNowCustomTimePicker(val hourRange: Int? = null, val minuteRange: Int? = null, override val is24Hours: Boolean, override val themeResId: Int = 0) :
+        TimePickerType(is24Hours, themeResId)
 
     /**
      * 結束時間為現在的timePicker
      * @param minuteRange 分鐘區間最小值
      * @param themeResId dialog style id
      */
-    data class EndNowCustomTimePicker(val minuteRange: Int, override val is24Hours: Boolean, override val themeResId: Int = 0) : TimePickerType(is24Hours, themeResId)
+    data class EndNowCustomTimePicker(val hourRange: Int?, val minuteRange: Int?, override val is24Hours: Boolean, override val themeResId: Int = 0) : TimePickerType(is24Hours, themeResId)
 
     /**
      * 完全自定義區間的 TimePicker

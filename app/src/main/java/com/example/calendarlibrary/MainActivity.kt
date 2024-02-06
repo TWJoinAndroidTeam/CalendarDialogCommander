@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.caledardialogcommander.model.*
+import com.example.caledardialogcommander.model.ui.CalendarRequest
+import com.example.caledardialogcommander.model.ui.DateCalenderType
+import com.example.caledardialogcommander.model.ui.DateInfo
+import com.example.caledardialogcommander.model.ui.TimeInfo
+import com.example.caledardialogcommander.model.ui.TimePickerType
 import com.example.caledardialogcommander.ui.CalendarDialogUtil
 import com.example.calendarlibrary.databinding.ActivityMainBinding
-import com.example.calendarlibrary.date_time.fomatToString
 import com.example.calendarlibrary.date_time.getCalenderString
 import com.example.calendarlibrary.date_time.toTimePattern
 import kotlinx.coroutines.launch
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         viewBinding.btnTimeCalendar.setOnClickListener {
             lifecycleScope.launch {
                 val timeInfo = CalendarDialogUtil.waitCalendarTimeDialogResponse(
-                    this@MainActivity, TimePickerType.NormalTimePicker(true, themeResId = R.style.CustomTimePickerDialog)
+                    this@MainActivity, TimePickerType.StartNowCustomTimePicker(minuteRange = 10, is24Hours = true, themeResId = R.style.CustomTimePickerDialog)
                 ) {
                     Toast.makeText(this@MainActivity, "cancel time by user!!", Toast.LENGTH_SHORT).show()
                 }
