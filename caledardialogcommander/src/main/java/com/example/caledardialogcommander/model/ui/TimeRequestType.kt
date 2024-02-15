@@ -52,14 +52,19 @@ sealed class TimePickerType(open val is24Hours: Boolean, open val themeResId: In
      * @param themeResId dialog style id
      */
     data class StartNowCustomTimePicker(val hourRange: Int? = null, val minuteRange: Int? = null, override val is24Hours: Boolean, override val themeResId: Int = 0) :
-        TimePickerType(is24Hours, themeResId)
+        TimePickerType(is24Hours, themeResId) {
+
+        constructor(totalMinute: Int, is24Hours: Boolean, themeResId: Int) : this(totalMinute / 60, totalMinute % 60, is24Hours, themeResId)
+    }
 
     /**
      * 結束時間為現在的timePicker
      * @param minuteRange 分鐘區間最小值
      * @param themeResId dialog style id
      */
-    data class EndNowCustomTimePicker(val hourRange: Int?, val minuteRange: Int?, override val is24Hours: Boolean, override val themeResId: Int = 0) : TimePickerType(is24Hours, themeResId)
+    data class EndNowCustomTimePicker(val hourRange: Int?, val minuteRange: Int?, override val is24Hours: Boolean, override val themeResId: Int = 0) : TimePickerType(is24Hours, themeResId) {
+        constructor(totalMinute: Int, is24Hours: Boolean, themeResId: Int) : this(totalMinute / 60, totalMinute % 60, is24Hours, themeResId)
+    }
 
     /**
      * 完全自定義區間的 TimePicker
@@ -76,5 +81,14 @@ sealed class TimePickerType(open val is24Hours: Boolean, open val themeResId: In
         val maxMinuteRange: Int? = null,
         override val is24Hours: Boolean,
         override val themeResId: Int = 0
-    ) : TimePickerType(is24Hours, themeResId)
+    ) : TimePickerType(is24Hours, themeResId) {
+        constructor(defaultHour: Int, defaultMinute: Int, totalMinute: Int, is24Hours: Boolean, themeResId: Int) : this(
+            defaultHour,
+            defaultMinute,
+            totalMinute / 60,
+            totalMinute % 60,
+            is24Hours,
+            themeResId
+        )
+    }
 }
