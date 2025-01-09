@@ -1,4 +1,4 @@
-package com.example.caledardialogcommander.model
+package com.example.caledardialogcommander.model.ui
 
 data class CalendarRequest(
     val timeRequestType: TimeRequestType? = null,
