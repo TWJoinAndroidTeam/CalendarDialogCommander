@@ -5,7 +5,14 @@ import android.content.Context
 import android.widget.TimePicker
 
 
-class RangeTimePickerDialog(context: Context?, dialogTheme: Int, callBack: OnTimeSetListener?, hourOfDay: Int, minute: Int, is24HourView: Boolean) :
+class RangeTimePickerDialog(
+    context: Context?,
+    dialogTheme: Int,
+    callBack: OnTimeSetListener?,
+    hourOfDay: Int,
+    minute: Int,
+    is24HourView: Boolean
+) :
     TimePickerDialog(context, dialogTheme, callBack, hourOfDay, minute, is24HourView) {
 
 
@@ -21,24 +28,37 @@ class RangeTimePickerDialog(context: Context?, dialogTheme: Int, callBack: OnTim
     private var currentMinute: Int = 0
 
 
-    fun setMin(hour: Int, minute: Int) {
-        this.minHour = hour
-        minMinute = minute
+    fun setMin(
+        hour: Int?,
+        minute: Int?
+    ) {
+        this.minHour = hour ?: NO_MATCH_VALUE
+        minMinute = minute ?: NO_MATCH_VALUE
     }
 
-    fun setMax(hour: Int, minute: Int) {
-        maxHour = hour
-        maxMinute = minute
+    fun setMax(
+        hour: Int?,
+        minute: Int?
+    ) {
+        maxHour = hour ?: NO_MATCH_VALUE
+        maxMinute = minute ?: NO_MATCH_VALUE
     }
 
-    override fun onTimeChanged(view: TimePicker, hourOfDay: Int, minute: Int) {
+    override fun onTimeChanged(
+        view: TimePicker,
+        hourOfDay: Int,
+        minute: Int
+    ) {
         super.onTimeChanged(view, hourOfDay, minute)
 
         getTimeAfterCheck(hourOfDay, minute)
 
     }
 
-    private fun getTimeAfterCheck(hourOfDay: Int, minute: Int) {
+    private fun getTimeAfterCheck(
+        hourOfDay: Int,
+        minute: Int
+    ) {
         val newHour: Int
         val newMinute: Int
 

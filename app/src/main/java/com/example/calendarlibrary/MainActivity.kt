@@ -57,8 +57,14 @@ class MainActivity : AppCompatActivity() {
 
         viewBinding.btnTimeCalendar.setOnClickListener {
             lifecycleScope.launch {
+
+                val minCalendar = Calendar.getInstance()
+                val maxCalendar = Calendar.getInstance()
+                maxCalendar.add(Calendar.MINUTE, 80)
+                minCalendar.add(Calendar.MINUTE, -80)
+
                 val timeInfo = CalendarDialogUtil.waitCalendarTimeDialogResponse(
-                    this@MainActivity, TimePickerType.StartNowCustomTimePicker(minuteRange = 10, is24Hours = true, themeResId = R.style.CustomTimePickerDialog)
+                    this@MainActivity, TimePickerType.CustomRangeTimePicker(maxCalendar = maxCalendar, minCalendar = minCalendar , is24Hours = true, themeResId = R.style.CustomTimePickerDialog)
                 ) {
                     Toast.makeText(this@MainActivity, "cancel time by user!!", Toast.LENGTH_SHORT).show()
                 }
