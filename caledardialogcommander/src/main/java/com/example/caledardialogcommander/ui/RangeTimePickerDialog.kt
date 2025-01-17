@@ -15,33 +15,34 @@ class RangeTimePickerDialog(
 ) :
     TimePickerDialog(context, dialogTheme, callBack, hourOfDay, minute, is24HourView) {
 
-
-    private companion object {
-        const val NO_MATCH_VALUE = -1
-    }
-
     private var minHour = 0
     private var minMinute = 0
     private var maxHour = 23
     private var maxMinute = 59
-    private var currentHour: Int = 0
-    private var currentMinute: Int = 0
 
 
     fun setMin(
         hour: Int?,
         minute: Int?
     ) {
-        this.minHour = hour ?: 0
-        minMinute = minute ?: 0
+        if (hour != null) {
+            this.minHour = hour
+        }
+        if (minute != null) {
+            minMinute = minute
+        }
     }
 
     fun setMax(
         hour: Int?,
         minute: Int?
     ) {
-        maxHour = hour ?: 23
-        maxMinute = minute ?: 59
+        if (hour != null) {
+            maxHour = hour
+        }
+        if (minute != null) {
+            maxMinute = minute
+        }
     }
 
     override fun onTimeChanged(
