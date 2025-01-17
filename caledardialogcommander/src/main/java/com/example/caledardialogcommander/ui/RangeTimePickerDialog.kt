@@ -20,10 +20,10 @@ class RangeTimePickerDialog(
         const val NO_MATCH_VALUE = -1
     }
 
-    private var minHour = NO_MATCH_VALUE
-    private var minMinute = NO_MATCH_VALUE
-    private var maxHour = NO_MATCH_VALUE
-    private var maxMinute = NO_MATCH_VALUE
+    private var minHour = 0
+    private var minMinute = 0
+    private var maxHour = 23
+    private var maxMinute = 59
     private var currentHour: Int = 0
     private var currentMinute: Int = 0
 
