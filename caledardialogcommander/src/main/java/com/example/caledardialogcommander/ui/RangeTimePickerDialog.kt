@@ -73,13 +73,14 @@ class RangeTimePickerDialog(
                 newMinute = minMinute
             }
 
-            hourOfDay > maxHour -> {
+            //當 maxHour為無限制時，不檢查
+            (maxHour != NO_MATCH_VALUE) && hourOfDay > maxHour -> {
                 newHour = maxHour
                 newMinute = maxMinute
-
             }
 
-            hourOfDay == maxHour && minute > maxMinute -> {
+            //當 maxMinute為無限制時，不檢查
+            (maxMinute != NO_MATCH_VALUE) && hourOfDay == maxHour && minute > maxMinute -> {
                 newHour = maxHour
                 newMinute = maxMinute
             }
