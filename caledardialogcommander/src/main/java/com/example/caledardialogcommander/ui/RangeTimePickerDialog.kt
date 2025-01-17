@@ -15,33 +15,34 @@ class RangeTimePickerDialog(
 ) :
     TimePickerDialog(context, dialogTheme, callBack, hourOfDay, minute, is24HourView) {
 
-
-    private companion object {
-        const val NO_MATCH_VALUE = -1
-    }
-
-    private var minHour = NO_MATCH_VALUE
-    private var minMinute = NO_MATCH_VALUE
-    private var maxHour = NO_MATCH_VALUE
-    private var maxMinute = NO_MATCH_VALUE
-    private var currentHour: Int = 0
-    private var currentMinute: Int = 0
+    private var minHour = 0
+    private var minMinute = 0
+    private var maxHour = 23
+    private var maxMinute = 59
 
 
     fun setMin(
         hour: Int?,
         minute: Int?
     ) {
-        this.minHour = hour ?: NO_MATCH_VALUE
-        minMinute = minute ?: NO_MATCH_VALUE
+        if (hour != null) {
+            this.minHour = hour
+        }
+        if (minute != null) {
+            minMinute = minute
+        }
     }
 
     fun setMax(
         hour: Int?,
         minute: Int?
     ) {
-        maxHour = hour ?: NO_MATCH_VALUE
-        maxMinute = minute ?: NO_MATCH_VALUE
+        if (hour != null) {
+            maxHour = hour
+        }
+        if (minute != null) {
+            maxMinute = minute
+        }
     }
 
     override fun onTimeChanged(
@@ -73,12 +74,13 @@ class RangeTimePickerDialog(
                 newMinute = minMinute
             }
 
+            //當 maxHour為無限制時，不檢查
             hourOfDay > maxHour -> {
                 newHour = maxHour
                 newMinute = maxMinute
-
             }
 
+            //當 maxMinute為無限制時，不檢查
             hourOfDay == maxHour && minute > maxMinute -> {
                 newHour = maxHour
                 newMinute = maxMinute

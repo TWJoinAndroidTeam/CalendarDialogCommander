@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 minCalendar.add(Calendar.MINUTE, -80)
 
                 val timeInfo = CalendarDialogUtil.waitCalendarTimeDialogResponse(
-                    this@MainActivity, TimePickerType.CustomRangeTimePicker(maxCalendar = maxCalendar, minCalendar = minCalendar , is24Hours = true, themeResId = R.style.CustomTimePickerDialog)
+                    this@MainActivity, TimePickerType.CustomRangeTimePicker(is24Hours = false, themeResId = R.style.CustomTimePickerDialog)
                 ) {
                     Toast.makeText(this@MainActivity, "cancel time by user!!", Toast.LENGTH_SHORT).show()
                 }
