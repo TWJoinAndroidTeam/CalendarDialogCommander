@@ -32,16 +32,16 @@ class RangeTimePickerDialog(
         hour: Int?,
         minute: Int?
     ) {
-        this.minHour = hour ?: NO_MATCH_VALUE
-        minMinute = minute ?: NO_MATCH_VALUE
+        this.minHour = hour ?: 0
+        minMinute = minute ?: 0
     }
 
     fun setMax(
         hour: Int?,
         minute: Int?
     ) {
-        maxHour = hour ?: NO_MATCH_VALUE
-        maxMinute = minute ?: NO_MATCH_VALUE
+        maxHour = hour ?: 23
+        maxMinute = minute ?: 59
     }
 
     override fun onTimeChanged(
@@ -74,13 +74,13 @@ class RangeTimePickerDialog(
             }
 
             //當 maxHour為無限制時，不檢查
-            (maxHour != NO_MATCH_VALUE) && hourOfDay > maxHour -> {
+            hourOfDay > maxHour -> {
                 newHour = maxHour
                 newMinute = maxMinute
             }
 
             //當 maxMinute為無限制時，不檢查
-            (maxMinute != NO_MATCH_VALUE) && hourOfDay == maxHour && minute > maxMinute -> {
+            hourOfDay == maxHour && minute > maxMinute -> {
                 newHour = maxHour
                 newMinute = maxMinute
             }
